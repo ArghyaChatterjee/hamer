@@ -26,11 +26,12 @@ We recommend creating a virtual environment for HaMeR. You can use venv:
 ```bash
 python3.10 -m venv hamer_venv
 source hamer_venv/bin/activate
+pip3 install --upgrade pip
 ```
 
-Then, you can install the rest of the dependencies. This is for CUDA 11.7, but you can adapt accordingly:
+Then, you can install the rest of the dependencies. This is for CUDA 12.1, but you can adapt accordingly:
 ```bash
-pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu117
+pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu121
 pip3 install -e .[all]
 pip3 install -v -e third-party/ViTPose
 ```
