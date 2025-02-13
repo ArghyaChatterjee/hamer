@@ -8,12 +8,6 @@ Code repository for the paper:
 
 ![teaser](assets/teaser.jpg)
 
-## News
-
-- [2024/06] HaMeR received the 2nd place award in the Ego-Pose Hands task of the Ego-Exo4D Challenge! Please check the [validation report](https://www.cs.utexas.edu/~pavlakos/hamer/resources/egoexo4d_challenge.pdf).
-- [2024/05] We have released the evaluation pipeline!
-- [2024/05] We have released the HInt dataset annotations! Please check [here](https://github.com/ddshan/hint).
-- [2023/12] Original release!
 
 ## Installation
 First you need to clone the repo:
@@ -26,7 +20,7 @@ We recommend creating a virtual environment for HaMeR. You can use venv:
 ```bash
 python3.10 -m venv hamer_venv
 source hamer_venv/bin/activate
-pip3 install --upgrade pip
+pip3 install --upgrade pip setuptools wheel
 ```
 
 Then, you can install the rest of the dependencies. This is for CUDA 12.1, but you can adapt accordingly:
@@ -34,6 +28,14 @@ Then, you can install the rest of the dependencies. This is for CUDA 12.1, but y
 pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu121
 pip3 install -e .[all]
 pip3 install -v -e third-party/ViTPose
+```
+
+If you want to install apex:
+```bash
+cd hamer
+git clone https://github.com/NVIDIA/apex
+cd apex
+pip3 install -v --disable-pip-version-check --no-cache-dir --no-build-isolation --config-settings "--build-option=--cpp_ext" --config-settings "--build-option=--cuda_ext" ./
 ```
 
 You also need to download the trained models:
@@ -65,9 +67,7 @@ bash fetch_demo_data.sh
 
 ## Demo
 ```bash
-python demo.py \
-    --img_folder example_data --out_folder demo_out \
-    --batch_size=48 --side_view --save_mesh --full_frame
+python3 demo.py --img_folder example_data --out_folder demo_out --batch_size=48 --side_view --save_mesh --full_frame
 ```
 
 ## HInt Dataset
@@ -80,8 +80,8 @@ bash fetch_training_data.sh
 ```
 
 Then you can start training using the following command:
-```
-python train.py exp_name=hamer data=mix_all experiment=hamer_vit_transformer trainer=gpu launcher=local
+```bash
+python3 train.py exp_name=hamer data=mix_all experiment=hamer_vit_transformer trainer=gpu launcher=local
 ```
 Checkpoints and logs will be saved to `./logs/`.
 
@@ -95,27 +95,6 @@ python eval.py --dataset 'FREIHAND-VAL,HO3D-VAL,NEWDAYS-TEST-ALL,NEWDAYS-TEST-VI
 
 Results for HInt are stored in `results/eval_regression.csv`. For [FreiHAND](https://github.com/lmb-freiburg/freihand) and [HO-3D](https://codalab.lisn.upsaclay.fr/competitions/4318) you get as output a `.json` file that can be used for evaluation using their corresponding evaluation processes.
 
-## Acknowledgements
-Parts of the code are taken or adapted from the following repos:
-- [4DHumans](https://github.com/shubham-goel/4D-Humans)
-- [SLAHMR](https://github.com/vye16/slahmr)
-- [ProHMR](https://github.com/nkolot/ProHMR)
-- [SPIN](https://github.com/nkolot/SPIN)
-- [SMPLify-X](https://github.com/vchoutas/smplify-x)
-- [HMR](https://github.com/akanazawa/hmr)
-- [ViTPose](https://github.com/ViTAE-Transformer/ViTPose)
-- [Detectron2](https://github.com/facebookresearch/detectron2)
+## Create your own Dataset
+You will find the HInt dataset annotations [here](https://github.com/ddshan/hint).
 
-Additionally, we thank [StabilityAI](https://stability.ai/) for a generous compute grant that enabled this work.
-
-## Citing
-If you find this code useful for your research, please consider citing the following paper:
-
-```bibtex
-@inproceedings{pavlakos2024reconstructing,
-    title={Reconstructing Hands in 3{D} with Transformers},
-    author={Pavlakos, Georgios and Shan, Dandan and Radosavovic, Ilija and Kanazawa, Angjoo and Fouhey, David and Malik, Jitendra},
-    booktitle={CVPR},
-    year={2024}
-}
-```

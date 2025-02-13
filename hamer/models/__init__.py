@@ -12,7 +12,8 @@ def download_models(folder=CACHE_DIR_HAMER):
     import os
     os.makedirs(folder, exist_ok=True)
     download_files = {
-        "hamer_demo_data.tar.gz"      : ["https://www.cs.utexas.edu/~pavlakos/hamer/data/hamer_demo_data.tar.gz", folder],
+        # "hamer_demo_data.tar.gz"      : ["https://www.cs.utexas.edu/~pavlakos/hamer/data/hamer_demo_data.tar.gz", folder],
+        "hamer_demo_data.tar.gz"      : ["https://drive.google.com/uc?id=1mv7CUAnm73oKsEEG1xE3xH2C_oqcFSzT", folder],
     }
     
     for file_name, url in download_files.items():
