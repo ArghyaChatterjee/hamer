@@ -1,19 +1,24 @@
 # HaMeR: Hand Mesh Recovery
-Code repository for the paper:
-**Reconstructing Hands in 3D with Transformers**
 
-[Georgios Pavlakos](https://geopavlakos.github.io/), [Dandan Shan](https://ddshan.github.io/), [Ilija Radosavovic](https://people.eecs.berkeley.edu/~ilija/), [Angjoo Kanazawa](https://people.eecs.berkeley.edu/~kanazawa/), [David Fouhey](https://cs.nyu.edu/~fouhey/), [Jitendra Malik](http://people.eecs.berkeley.edu/~malik/)
+## Code workflow
 
-[![arXiv](https://img.shields.io/badge/arXiv-2312.05251-00ff00.svg)](https://arxiv.org/pdf/2312.05251.pdf)  [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://geopavlakos.github.io/hamer/)     [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1rQbQzegFWGVOm1n1d-S6koOWDo7F2ucu?usp=sharing)  [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/geopavlakos/HaMeR)
+The whole workflow runs the following way:
 
-![teaser](assets/teaser.jpg)
+- Runs human detection using ViTDet.
+- Extracts hand keypoints using ViTPose.
+- Computes bounding boxes for the hands.
+- Runs the HaMeR model to generate 3D hand meshes.
+- Renders the meshes and overlays them on the webcam feed or offline images.
+- Displays the processed video stream in real-time or offline.
 
+## Requirements
+This has been tested on Ubuntu 22.4 machine with Nvidia 4070 RTX GPU and cuda 12.1. 
 
 ## Installation
-First you need to clone the repo:
+Clone the repo:
 ```
-git clone --recursive https://github.com/ArghyaChatterjee/hamer.git
-cd hamer
+git clone ihmc-robot-hand-pose-estimation-pipeline.git
+cd ihmc-robot-hand-pose-estimation-pipeline/hand_mesh_generation/hamer
 ```
 
 We recommend creating a virtual environment for HaMeR. You can use venv:
@@ -45,33 +50,58 @@ bash fetch_demo_data.sh
 
 Besides these files, you also need to download the MANO model. Please visit the [MANO website](https://mano.is.tue.mpg.de) and register to get access to the downloads section.  We only require the right hand model. You need to put `MANO_RIGHT.pkl` under the `_DATA/data/mano` folder.
 
-### Docker Compose
+## Offline Demo
 
-If you wish to use HaMeR with Docker, you can use the following command:
-
-```
-docker compose -f ./docker/docker-compose.yml up -d
-```
-
-After the image is built successfully, enter the container and run the steps as above:
-
-```
-docker compose -f ./docker/docker-compose.yml exec hamer-dev /bin/bash
-```
-
-Continue with the installation steps:
-
+If you want an offline demo, use this script:
 ```bash
-bash fetch_demo_data.sh
+python3 offline_demo.py --img_folder example_data --out_folder demo_out --batch_size=48 --side_view --save_mesh --full_frame --body_detector regnety
+```
+We are using `regnety` as the human body detector in stead of `vitdet`. If you want to use the `vitdet`, change the `--body_detector` to `regnety`. If your code doesn't run, then change the batch size to `32`, `16`, `8`, `4`, `2` and `1`. 
+
+## Online Demo
+
+If you want an online demo, use this script:
+```bash
+python3 online_demo.py 
+```
+In this script, `batch_size=48` and `body_detector` is set to `regnety`. Here is how the workflow starts:
+
+1️⃣ Captures frames from the webcam using OpenCV.
+
+2️⃣ Runs human detection using ViTDet.
+
+3️⃣ Extracts hand keypoints using ViTPose.
+
+4️⃣ Computes bounding boxes for the hands.
+
+5️⃣ Runs the HaMeR model to generate 3D hand meshes.
+
+6️⃣ Renders the meshes and overlays them on the webcam feed.
+
+7️⃣ Displays the processed video stream in real-time.
+
+8️⃣ Press 'Q' to exit.
+
+
+## Visualize the Hand Mesh model
+
+In order to visualize the hand model, run this script:
+```bash
+python3 visualize_hand_model_pickle.py
 ```
 
-## Demo
+<p align="center">
+  <img src="assets/mano_hand_mesh.png" alt="Hand Mesh Model" width="500">
+</p>
+
+If you want to convert the hand mesh model from `.pkl` to an `.obj` file, run the following script:
 ```bash
-python3 demo.py --img_folder example_data --out_folder demo_out --batch_size=48 --side_view --save_mesh --full_frame
+python3 export_hand_model_from_pkl_to_obj.py
 ```
+The input for this script is `MANO_RIGHT.pkl`. Once you convert, you can openup the `MANO_RIGHT.obj` file in blender or meshlab. 
 
 ## HInt Dataset
-We have released the annotations for the HInt dataset. Please follow the instructions [here](https://github.com/ddshan/hint)
+Annotations for the HInt dataset has been released. Please follow the instructions [here](https://github.com/ddshan/hint)
 
 ## Training
 First, download the training data to `./hamer_training_data/` by running:
@@ -95,6 +125,26 @@ python eval.py --dataset 'FREIHAND-VAL,HO3D-VAL,NEWDAYS-TEST-ALL,NEWDAYS-TEST-VI
 
 Results for HInt are stored in `results/eval_regression.csv`. For [FreiHAND](https://github.com/lmb-freiburg/freihand) and [HO-3D](https://codalab.lisn.upsaclay.fr/competitions/4318) you get as output a `.json` file that can be used for evaluation using their corresponding evaluation processes.
 
-## Create your own Dataset
+## Work with Custom Dataset
 You will find the HInt dataset annotations [here](https://github.com/ddshan/hint).
+
+## Install using Docker 
+
+If you wish to use HaMeR with Docker, you can use the following command:
+
+```
+docker compose -f ./docker/docker-compose.yml up -d
+```
+
+After the image is built successfully, enter the container and run the steps as above:
+
+```
+docker compose -f ./docker/docker-compose.yml exec hamer-dev /bin/bash
+```
+
+Continue with the installation steps:
+
+```bash
+bash fetch_demo_data.sh
+```
 
