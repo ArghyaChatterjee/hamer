@@ -35,7 +35,7 @@ pip3 install -e .[all]
 pip3 install -v -e third-party/ViTPose
 ```
 
-If you want to install apex:
+If you want to install apex (needed for training, not needed for demo testing):
 ```bash
 cd hamer
 git clone https://github.com/NVIDIA/apex
