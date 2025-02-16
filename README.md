@@ -17,8 +17,8 @@ This has been tested on Ubuntu 22.4 machine with Nvidia 4070 RTX GPU and cuda 12
 ## Installation
 Clone the repo:
 ```
-git clone ihmc-robot-hand-pose-estimation-pipeline.git
-cd ihmc-robot-hand-pose-estimation-pipeline/hand_mesh_generation/hamer
+git clone https://github.com/ArghyaChatterjee/hamer.git
+cd hamer
 ```
 
 We recommend creating a virtual environment for HaMeR. You can use venv:
