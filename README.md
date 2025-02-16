@@ -148,3 +148,7 @@ Continue with the installation steps:
 bash fetch_demo_data.sh
 ```
 
+## Troubleshoot
+
+Follow this github [issue](https://github.com/geopavlakos/hamer/issues/103) for troubleshooting the error. You need a decent VRAM (atleast 12 GB) of the Nvidia RTX GPU or else it will continuously complain about cuda out of memory. My Nvidia 3060 RTX GPU with 6 GB VRAM was not able to run this code. 
+
