@@ -180,3 +180,27 @@ bash download_pretrained_checkpoints.sh
 
 Follow this github [issue](https://github.com/geopavlakos/hamer/issues/103) for troubleshooting the error. You need a decent VRAM (at least 12 GB) of the Nvidia RTX GPU or else it will continuously complain about cuda out of memory. My Nvidia 3060 RTX GPU with 6 GB VRAM could not run this code. To run this code, I had to switch to the Nvidia 4070 RTX GPU with 16 GB VRAM.
 
+## Key Differences between SMPLH and MANO
+
+1. SMPLH (SMPL + Hands): Skinned Multi-Person Linear model with Hands
+2. MANO: Modeling and Capturing Hands Only 
+
+- Scope
+  - SMPLH: A full-body model that includes hand components, but with potentially lower hand detail if not merged with a more detailed hand model.
+  - MANO: A dedicated hand model optimized for capturing detailed hand shapes and poses.
+
+- Detail Level for Hands:
+
+  - SMPLH: May use PCA-based hand representations for efficiency, which can reduce the number of parameters (and hence the detail) for the hands.
+  - MANO: Provides a higher-dimensional and more detailed representation of the hand, capturing finer details in hand shape and finger articulation.
+
+- Integration vs. Specialization:
+
+  - SMPLH: Useful for integrated, whole-body tasks where you need a unified model that represents the entire human figure.
+  - MANO: Specialized for tasks that require very accurate hand modeling, independent of the body.
+
+## When to Use Which?
+- Use SMPLH when your application requires a complete human model (e.g., full-body pose estimation, animation, or synthesis) and you need some hand modeling integrated into the overall model.
+
+- Use MANO when your application focuses on the hand exclusively (e.g., detailed hand pose estimation, gesture recognition) or when you want to merge a high-detail hand model with a full-body model for enhanced hand fidelity.
+
