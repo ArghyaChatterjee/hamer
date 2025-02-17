@@ -43,20 +43,48 @@ cd apex
 pip3 install -v --disable-pip-version-check --no-cache-dir --no-build-isolation --config-settings "--build-option=--cpp_ext" --config-settings "--build-option=--cuda_ext" ./
 ```
 
-You also need to download the trained models:
+You also need to download the pre-trained models:
 ```bash
-bash fetch_demo_data.sh
+bash download_pretrained_checkpoints.sh
+```
+
+Once the checkpoints are downloaded for the pre-trained models and extracted, the folder structure looks like this:
+```
+hamer
+  ├── _DATA
+  │   ├── data
+  │   ├── hamer_ckpts
+  │   └── vitpose_ckpts
+  ├── eval.py
+  ├── docker
+  ├── ...
+  ...
 ```
 
 Besides these files, you also need to download the MANO model. Please visit the [MANO website](https://mano.is.tue.mpg.de) and register to get access to the downloads section.  We only require the right hand model. You need to put `MANO_RIGHT.pkl` under the `_DATA/data/mano` folder.
 
-## Offline Demo
+You can download the model from the google drive as well. Here is the [link](https://drive.google.com/file/d/1dIqIesDh7n4TAFvp8uH7j-8uzyWOk2AB/view?usp=sharing).
 
+The final folder structure should look like this:
+```
+hamer
+  ├── _DATA
+  │   ├── data
+  |   |     ├── mano
+  │   │     │     ├── MANO_RIGHT.pkl
+  |   |     ├── mano_mean_params.npz
+  │   ├── hamer_ckpts
+  │   └── vitpose_ckpts
+  ├── ...
+
+```
+
+## Offline Demo
 If you want an offline demo, use this script:
 ```bash
 python3 offline_demo.py --img_folder example_data --out_folder demo_out --batch_size=48 --side_view --save_mesh --full_frame --body_detector regnety
 ```
-We are using `regnety` as the human body detector in stead of `vitdet`. If you want to use the `vitdet`, change the `--body_detector` to `regnety`. If your code doesn't run, then change the batch size to `32`, `16`, `8`, `4`, `2` and `1`. 
+We are using `regnety` as the human body detector in stead of `vitdet`. If you want to use the `vitdet`, change the `--body_detector` to `vitdet`. If your code doesn't run, then change the batch size to `32`, `16`, `8`, `4`, `2` and `1`. 
 
 ## Online Demo
 
@@ -64,7 +92,7 @@ If you want an online demo, use this script:
 ```bash
 python3 online_demo.py 
 ```
-In this script, `batch_size=48` and `body_detector` is set to `regnety`. Here is how the workflow starts:
+In this script, the input is your webcam image, the output is a box showing the detected and rendered hand mesh on that live image stream, `batch_size=48` and `body_detector` is set to `regnety`. Here is how the workflow starts:
 
 1️⃣ Captures frames from the webcam using OpenCV.
 
@@ -106,7 +134,7 @@ Annotations for the HInt dataset has been released. Please follow the instructio
 ## Training
 First, download the training data to `./hamer_training_data/` by running:
 ```
-bash fetch_training_data.sh
+bash download_training_data.sh
 ```
 
 Then you can start training using the following command:
@@ -145,10 +173,10 @@ docker compose -f ./docker/docker-compose.yml exec hamer-dev /bin/bash
 Continue with the installation steps:
 
 ```bash
-bash fetch_demo_data.sh
+bash download_pretrained_checkpoints.sh
 ```
 
 ## Troubleshoot
 
-Follow this github [issue](https://github.com/geopavlakos/hamer/issues/103) for troubleshooting the error. You need a decent VRAM (atleast 12 GB) of the Nvidia RTX GPU or else it will continuously complain about cuda out of memory. My Nvidia 3060 RTX GPU with 6 GB VRAM was not able to run this code. 
+Follow this github [issue](https://github.com/geopavlakos/hamer/issues/103) for troubleshooting the error. You need a decent VRAM (at least 12 GB) of the Nvidia RTX GPU or else it will continuously complain about cuda out of memory. My Nvidia 3060 RTX GPU with 6 GB VRAM could not run this code. To run this code, I had to switch to the Nvidia 4070 RTX GPU with 16 GB VRAM.
 
