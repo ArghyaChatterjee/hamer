@@ -129,7 +129,7 @@ python3 export_hand_model_from_pkl_to_obj.py
 The input for this script is `MANO_RIGHT.pkl`. Once you convert, you can openup the `MANO_RIGHT.obj` file in blender or meshlab. 
 
 ## HInt Dataset
-Annotations for the HInt dataset has been released. Please follow the instructions [here](https://github.com/ddshan/hint)
+Annotations for the HInt dataset has been released. Please follow the instructions [here](https://github.com/ddshan/hint).
 
 ## Training
 First, download the training data to `./hamer_training_data/` by running:
