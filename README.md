@@ -45,7 +45,7 @@ pip3 install -v --disable-pip-version-check --no-cache-dir --no-build-isolation 
 
 You also need to download the pre-trained models:
 ```bash
-bash download_pretrained_checkpoints.sh
+./download_pretrained_checkpoints.sh
 ```
 
 Once the checkpoints are downloaded for the pre-trained models and extracted, the folder structure looks like this:
@@ -115,7 +115,7 @@ In this script, the input is your webcam image, the output is a box showing the 
 
 In order to visualize the hand model, run this script:
 ```bash
-python3 visualize_hand_model_pickle.py
+python3 visualize_MANO_hand_model_pickle.py
 ```
 
 <p align="center">
@@ -134,7 +134,7 @@ Annotations for the HInt dataset has been released. Please follow the instructio
 ## Training
 First, download the training data to `./hamer_training_data/` by running:
 ```
-bash download_training_data.sh
+./download_training_data.sh
 ```
 
 Then you can start training using the following command:
@@ -173,7 +173,7 @@ docker compose -f ./docker/docker-compose.yml exec hamer-dev /bin/bash
 Continue with the installation steps:
 
 ```bash
-bash download_pretrained_checkpoints.sh
+./download_pretrained_checkpoints.sh
 ```
 
 ## Troubleshoot
@@ -203,4 +203,7 @@ Follow this github [issue](https://github.com/geopavlakos/hamer/issues/103) for 
 - Use SMPLH when your application requires a complete human model (e.g., full-body pose estimation, animation, or synthesis) and you need some hand modeling integrated into the overall model.
 
 - Use MANO when your application focuses on the hand exclusively (e.g., detailed hand pose estimation, gesture recognition) or when you want to merge a high-detail hand model with a full-body model for enhanced hand fidelity.
+
+## Merge Parameters from MANO to SMPLH
+If you want to merge the MANO parameters to SMPLH parameters, checkout this [repo](https://github.com/vchoutas/smplx/tree/main/tools).
 
