@@ -4,7 +4,7 @@
 
 The whole workflow runs the following way:
 
-- Runs human detection using ViTDet or Regenty.
+- Runs human detection using ViTDet or Regnety.
 - Extracts hand keypoints using ViTPose.
 - Computes bounding boxes for the hands.
 - Runs the HaMeR model to generate 3D hand meshes.
